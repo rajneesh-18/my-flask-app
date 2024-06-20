@@ -20,14 +20,12 @@ p {
     color: #666;
 }
 
-/* Custom footer styles */
 .footer {
     position: fixed;
     bottom: 0;
     width: 100%;
 }
 
-/* Animation classes */
 .animated {
     animation-duration: 1s;
     animation-fill-mode: both;
@@ -80,7 +78,6 @@ p {
     animation-delay: 2s;
 }
 
-/* Portfolio section styles */
 .portfolio-section {
     padding: 50px 0;
 }

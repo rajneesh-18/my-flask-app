@@ -1,96 +1,86 @@
+/* Custom styles for GitHub Contributions web app */
+
+/* Body and Typography */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    line-height: 1.6;
     margin: 0;
     padding: 0;
 }
 
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+/* Header */
+.header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 80px 0;
+    text-align: center;
 }
 
-h1 {
-    color: #333;
-    margin-top: 50px;
+.header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
-p {
-    color: #666;
+.header .btn-fetch {
+    font-size: 1.2rem;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+.header .btn-fetch:hover {
+    background-color: #0056b3;
+    color: #fff;
 }
 
-.animated {
-    animation-duration: 1s;
-    animation-fill-mode: both;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.fadeIn {
-    animation-name: fadeIn;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translate3d(0, 100%, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-.fadeInUp {
-    animation-name: fadeInUp;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translate3d(0, 100%, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-.delay-1s {
-    animation-delay: 1s;
-}
-
-.delay-2s {
-    animation-delay: 2s;
-}
-
-.portfolio-section {
-    padding: 50px 0;
-}
-
-.portfolio-section h2 {
-    margin-bottom: 40px;
-    color: #333;
+/* Main Content */
+.main-content {
+    padding: 60px 0;
 }
 
 .card {
-    transition: transform 0.3s;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    border-radius: 8px;
 }
 
 .card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Footer */
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer p {
+    margin-bottom: 0;
 }

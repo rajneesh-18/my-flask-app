@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, session
+from flask import Flask, redirect, url_for, session, request, render_template, jsonify
 from flask_oauthlib.client import OAuth
 
 app = Flask(__name__)
@@ -47,6 +47,17 @@ def authorized():
     session['user'] = user.data['login']
 
     return redirect(url_for('index'))
+
+@app.route('/fetch_github_data')
+def fetch_github_data():
+    if 'github_token' not in session:
+        return redirect(url_for('login'))
+    
+    resp = github.get('user/repos')
+    if resp.status != 200:
+        return jsonify({'message': 'Failed to fetch GitHub repositories'}), resp.status
+    
+    return jsonify(resp.data)
 
 @github.tokengetter
 def get_github_oauth_token():

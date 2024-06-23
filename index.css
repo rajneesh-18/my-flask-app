@@ -1,86 +1,74 @@
-/* Custom styles for GitHub Contributions web app */
-
-/* Body and Typography */
+/* General styling */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
-    color: #343a40;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
 }
 
-/* Header */
-.header {
-    background-color: #007bff;
-    color: #fff;
-    padding: 80px 0;
-    text-align: center;
+/* Header styling */
+header {
+    background: linear-gradient(to right, #0066cc, #0099ff);
 }
 
-.header h1 {
-    font-size: 3rem;
+header h1 {
     font-weight: 700;
-    margin-bottom: 20px;
+    font-size: 3rem;
 }
 
-.header .btn-fetch {
+header .btn {
     font-size: 1.2rem;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #007bff;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
 }
 
-.header .btn-fetch:hover {
-    background-color: #0056b3;
-    color: #fff;
+/* Main content styling */
+main {
+    padding: 2rem 0;
 }
 
-/* Main Content */
-.main-content {
-    padding: 60px 0;
+#contributions .card {
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.card {
-    background-color: #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: none;
-    border-radius: 8px;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-}
-
-.card-body {
-    padding: 20px;
+#contributions .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .card-text {
     font-size: 1rem;
-    color: #6c757d;
+    color: #555;
 }
 
-/* Footer */
-.footer {
+.btn-primary {
+    background-color: #0066cc;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #005bb5;
+}
+
+/* Footer styling */
+footer {
     background-color: #343a40;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
 }
 
-.footer p {
-    margin-bottom: 0;
+footer p {
+    margin: 0;
+    font-size: 1rem;
+    color: #bbb;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5rem;
+    }
+
+    header .btn {
+        font-size: 1rem;
+    }
 }

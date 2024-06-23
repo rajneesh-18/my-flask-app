@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Contributions</title>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
     <!-- Include Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='index.css') }}" rel="stylesheet">
 </head>
 <body>
     <header class="bg-primary py-5 text-center text-white">
         <div class="container">
             <h1 class="display-4 mb-4">GitHub Contributions</h1>
             <div class="form-group">
-                {% if not session.logged_in %}
+                {% if not session.user %}
                     <a href="{{ url_for('login') }}" class="btn btn-light mt-3">Login with GitHub</a>
                 {% else %}
                     <button class="btn btn-light mt-3" onclick="fetchGitHubData()">Fetch Contributions</button>
@@ -41,6 +41,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Custom JavaScript -->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>

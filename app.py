@@ -1,61 +1,56 @@
-from flask import Flask, render_template, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, redirect, url_for, session
+from flask_oauthlib.client import OAuth
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable Flask-SQLAlchemy event system
-db = SQLAlchemy(app)
+app.secret_key = 'random_secret_key'
+app.config['GITHUB_CLIENT_ID'] = 'your_github_client_id'
+app.config['GITHUB_CLIENT_SECRET'] = 'your_github_client_secret'
 
-# Define your database model
-class GitHubRepo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    html_url = db.Column(db.String(255), nullable=False)
+oauth = OAuth(app)
+github = oauth.remote_app(
+    'github',
+    consumer_key=app.config['GITHUB_CLIENT_ID'],
+    consumer_secret=app.config['GITHUB_CLIENT_SECRET'],
+    request_token_params={'scope': 'user:email'},
+    base_url='https://api.github.com/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://github.com/login/oauth/access_token',
+    authorize_url='https://github.com/login/oauth/authorize'
+)
 
-    def __repr__(self):
-        return f'<GitHubRepo {self.name}>'
-
-# Create tables based on defined models (run once)
-db.create_all()
-
-# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/fetch_github_data')
-def fetch_github_data():
-    # Example data to simulate fetching from GitHub API
-    sample_data = [
-        {'name': 'Repo 1', 'description': 'First repository', 'html_url': 'https://github.com/user/repo1'},
-        {'name': 'Repo 2', 'description': 'Second repository', 'html_url': 'https://github.com/user/repo2'}
-    ]
+@app.route('/login')
+def login():
+    return github.authorize(callback=url_for('authorized', _external=True))
 
-    # Save sample data to database (replace with actual database insertion)
-    for data in sample_data:
-        repo = GitHubRepo(name=data['name'], description=data['description'], html_url=data['html_url'])
-        db.session.add(repo)
-    db.session.commit()
+@app.route('/logout')
+def logout():
+    session.pop('github_token')
+    session.pop('user')
+    return redirect(url_for('index'))
 
-    return 'GitHub data fetched and saved to database successfully!'
+@app.route('/login/authorized')
+def authorized():
+    response = github.authorized_response()
+    if response is None or response.get('access_token') is None:
+        return 'Access denied: reason={} error={}'.format(
+            request.args['error'],
+            request.args['error_description']
+        )
 
-@app.route('/get_github_repos')
-def get_github_repos():
-    # Query all GitHub repositories from database
-    repos = GitHubRepo.query.all()
+    session['github_token'] = (response['access_token'], '')
+    user = github.get('user')
+    session['user'] = user.data['login']
 
-    # Convert to dictionary for JSON response
-    repo_list = []
-    for repo in repos:
-        repo_data = {
-            'name': repo.name,
-            'description': repo.description,
-            'html_url': repo.html_url
-        }
-        repo_list.append(repo_data)
+    return redirect(url_for('index'))
 
-    return jsonify(repo_list)
+@github.tokengetter
+def get_github_oauth_token():
+    return session.get('github_token')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

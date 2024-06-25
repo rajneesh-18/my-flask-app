@@ -19,6 +19,7 @@
                     <a href="{{ url_for('login') }}" class="btn btn-light mt-3">Login with GitHub</a>
                 {% else %}
                     <button class="btn btn-light mt-3" onclick="fetchGitHubData()">Fetch Contributions</button>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
                 {% endif %}
             </div>
         </div>

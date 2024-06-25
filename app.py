@@ -2,9 +2,9 @@ from flask import Flask, redirect, url_for, session, request, render_template, j
 from flask_oauthlib.client import OAuth
 
 app = Flask(__name__)
-app.secret_key = 'random_secret_key'
-app.config['GITHUB_CLIENT_ID'] = 'your_github_client_id'
-app.config['GITHUB_CLIENT_SECRET'] = 'your_github_client_secret'
+app.secret_key = 'random_secret_key'  # Make sure this is a strong, unique key
+app.config['GITHUB_CLIENT_ID'] = 'your_github_client_id'  # Replace with actual client ID
+app.config['GITHUB_CLIENT_SECRET'] = 'your_github_client_secret'  # Replace with actual client secret
 
 oauth = OAuth(app)
 github = oauth.remote_app(
@@ -29,8 +29,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('github_token')
-    session.pop('user')
+    session.pop('github_token', None)
+    session.pop('user', None)
     return redirect(url_for('index'))
 
 @app.route('/login/authorized')
@@ -38,8 +38,8 @@ def authorized():
     response = github.authorized_response()
     if response is None or response.get('access_token') is None:
         return 'Access denied: reason={} error={}'.format(
-            request.args['error'],
-            request.args['error_description']
+            request.args.get('error'),
+            request.args.get('error_description')
         )
 
     session['github_token'] = (response['access_token'], '')
@@ -53,9 +53,11 @@ def fetch_github_data():
     if 'github_token' not in session:
         return redirect(url_for('login'))
     
-    resp = github.get('user/repos')
-    if resp.status != 200:
-        return jsonify({'message': 'Failed to fetch GitHub repositories'}), resp.status
+    try:
+        resp = github.get('user/repos')
+        resp.raise_for_status()  # Raises an HTTPError for bad responses
+    except Exception as e:
+        return jsonify({'message': 'Failed to fetch GitHub repositories', 'error': str(e)}), 500
     
     return jsonify(resp.data)
 
@@ -64,4 +66,4 @@ def get_github_oauth_token():
     return session.get('github_token')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)  # Enable debug mode for better error messages and auto-reload

@@ -1,11 +1,17 @@
-from flask import Flask, redirect, url_for, session, request, render_template, jsonify
+import os
+from flask import Flask, redirect, url_for, session, request, render_template, jsonify, flash
 from flask_oauthlib.client import OAuth
+from dotenv import load_dotenv
+
+# Load environment variables from a .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'random_secret_key'  # Make sure this is a strong, unique key
-app.config['GITHUB_CLIENT_ID'] = 'your_github_client_id'  # Replace with actual client ID
-app.config['GITHUB_CLIENT_SECRET'] = 'your_github_client_secret'  # Replace with actual client secret
+app.secret_key = os.getenv('SECRET_KEY', 'random_secret_key')
+app.config['GITHUB_CLIENT_ID'] = os.getenv('GITHUB_CLIENT_ID')
+app.config['GITHUB_CLIENT_SECRET'] = os.getenv('GITHUB_CLIENT_SECRET')
 
+# Initialize OAuth
 oauth = OAuth(app)
 github = oauth.remote_app(
     'github',
@@ -31,16 +37,18 @@ def login():
 def logout():
     session.pop('github_token', None)
     session.pop('user', None)
+    flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
 
 @app.route('/login/authorized')
 def authorized():
     response = github.authorized_response()
     if response is None or response.get('access_token') is None:
-        return 'Access denied: reason={} error={}'.format(
+        flash('Access denied: reason={} error={}'.format(
             request.args.get('error'),
             request.args.get('error_description')
-        )
+        ), 'error')
+        return redirect(url_for('index'))
 
     session['github_token'] = (response['access_token'], '')
     user = github.get('user')
@@ -51,6 +59,7 @@ def authorized():
 @app.route('/fetch_github_data')
 def fetch_github_data():
     if 'github_token' not in session:
+        flash('Please log in to fetch GitHub data.', 'warning')
         return redirect(url_for('login'))
     
     try:

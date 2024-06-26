@@ -3,45 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Contributions</title>
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="{{ url_for('static', filename='index.css') }}" rel="stylesheet">
+    <title>GitHub OAuth with Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    <header class="bg-primary py-5 text-center text-white">
-        <div class="container">
-            <h1 class="display-4 mb-4">GitHub Contributions</h1>
-            <div class="form-group">
-                {% if not session.user %}
-                    <a href="{{ url_for('login') }}" class="btn btn-light mt-3">Login with GitHub</a>
-                {% else %}
-                    <button class="btn btn-light mt-3" onclick="fetchGitHubData()">Fetch Contributions</button>
-                    <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
-
-    <main class="container mt-5">
-        <section id="contributions" class="row">
-            <!-- GitHub contributions will be dynamically added here -->
-        </section>
-    </main>
-
-    <footer class="bg-dark text-white text-center py-4">
-        <div class="container">
-            <p>&copy; 2024 GitHub Contributions App</p>
-        </div>
-    </footer>
-
-    <!-- Include Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Custom JavaScript -->
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <div class="container">
+        <h1>Welcome to the GitHub OAuth Demo</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if 'user' in session %}
+            <p>Hello, {{ session.user }}!</p>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+            <br>
+            <a href="{{ url_for('fetch_github_data') }}" class="btn">Fetch GitHub Repositories</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="btn">Login with GitHub</a>
+        {% endif %}
+    </div>
 </body>
 </html>

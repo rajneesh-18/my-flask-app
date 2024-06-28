@@ -1,10 +1,11 @@
+<!-- app/templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub OAuth with Flask</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
     <div class="container">
@@ -18,12 +19,14 @@
         {% endwith %}
         {% if 'user' in session %}
             <p>Hello, {{ session.user }}!</p>
-            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+            <a href="{{ url_for('auth.logout') }}" class="btn">Logout</a>
             <br>
-            <a href="{{ url_for('fetch_github_data') }}" class="btn">Fetch GitHub Repositories</a>
+            <a href="{{ url_for('fetch_github_data') }}" class="btn" onclick="fetchGitHubData()">Fetch GitHub Repositories</a>
+            <div id="contributions" class="row"></div>
         {% else %}
-            <a href="{{ url_for('login') }}" class="btn">Login with GitHub</a>
+            <a href="{{ url_for('auth.login') }}" class="btn">Login with GitHub</a>
         {% endif %}
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

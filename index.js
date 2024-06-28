@@ -1,3 +1,4 @@
+// app/static/js/main.js
 function fetchGitHubData() {
     fetch('/fetch_github_data')
         .then(response => {

@@ -1,8 +1,13 @@
+# app/models.py
 
+# Importing SQLAlchemy from Flask
 from flask_sqlalchemy import SQLAlchemy
 
+# Initializing the SQLAlchemy instance
 db = SQLAlchemy()
 
+
+# Defining the Portfolio modelline
 class Portfolio(db.Model):
     # Unique identifier for each portfolio item
     id = db.Column(db.Integer, primary_key=True)
